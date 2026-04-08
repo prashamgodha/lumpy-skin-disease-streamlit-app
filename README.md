@@ -6,8 +6,6 @@ A deep learning-based livestock disease detection system leveraging a **pre-trai
 
 📂 **GitHub Repo:** https://github.com/prashamgodha/lumpy-skin-disease-streamlit-app.git  
 
-🎥 **Demo Video:** [Add YouTube Link]
-
 ---
 
 ## 📌 Overview
