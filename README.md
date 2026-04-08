@@ -1,104 +1,171 @@
-# 🐄 LSD Detect — Lumpy Skin Disease Detection Dashboard
+# 🐄 Lumpy Skin Disease Detection using Deep Learning
 
-A production-grade Streamlit dashboard for multi-model Lumpy Skin Disease detection 
-using MobileNetV2, ResNet50, and EfficientNetB0 with transfer learning + fine-tuning.
+A deep learning-based livestock disease detection system leveraging a **pre-trained CNN models**, transfer learning, and image classification for accurate detection of Lumpy Skin Disease in cattle.
 
----
+🚀 **Live App:** https://lumpy-skin-disease-app-app-eux4j4byzabeo9d4rrc9sp.streamlit.app
 
-## 🚀 Quick Deploy to Streamlit Cloud (Free)
+📂 **GitHub Repo:** https://github.com/prashamgodha/lumpy-skin-disease-streamlit-app.git  
 
-### Step 1 — Push to GitHub
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-gh repo create lumpy-skin-detect --public --source=. --push
-```
-
-### Step 2 — Deploy on Streamlit Cloud
-1. Go to https://share.streamlit.io
-2. Click **"New app"**
-3. Connect your GitHub repo
-4. Set **Main file path** to `app.py`
-5. Click **Deploy** ✅
+🎥 **Demo Video:** [Add YouTube Link]
 
 ---
 
-## 🖥️ Local Development
+## 📌 Overview
 
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
+This project presents a **complete end-to-end deep learning pipeline** for automated Lumpy Skin Disease detection in livestock.
 
----
+The system:
+- Classifies images into **Normal Skin vs Lumpy Skin Disease**  
+- Uses **transfer learning with pretrained CNN architectures**  
+- Compares multiple models for performance evaluation  
+- Provides predictions via a **Streamlit web interface**  
 
-## 📦 To Use Real Models (Production Mode)
-
-Place your trained model files alongside `app.py`:
-```
-lumpy_skin_dashboard/
-├── app.py
-├── requirements.txt
-├── fmobilenet_lumpy.h5
-├── fresnet_lumpy.h5         ← rename from fresnet_lumpy.pkl
-├── fefficientnet_lumpy.h5   ← rename from fefficientnet_lumpy.pkl
-└── class_names.pkl
-```
-
-Then in `app.py`, replace the simulated prediction block with:
-```python
-@st.cache_resource
-def load_all_models():
-    from tensorflow.keras.models import load_model
-    mob = load_model("fmobilenet_lumpy.h5")
-    res = load_model("fresnet_lumpy.h5")
-    eff = load_model("fefficientnet_lumpy.h5")
-    return mob, res, eff
-
-model_mob, model_res, model_eff = load_all_models()
-
-def preprocess(image):
-    from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-    img = image.resize((224,224))
-    img = np.array(img)
-    img = preprocess_input(img)
-    return np.expand_dims(img, 0)
-
-img = preprocess(uploaded_image)
-pred_mob = float(model_mob.predict(img)[0][0])
-pred_res = float(model_res.predict(img)[0][0])
-pred_eff = float(model_eff.predict(img)[0][0])
-```
-
-> ⚠️ Note: Streamlit Cloud free tier has 1 GB RAM. TF models (~100MB+) 
-> may hit limits. Consider Hugging Face Spaces (2GB) or Railway for larger models.
+It offers a **scalable, cost-effective, and AI-powered solution** for early livestock disease detection.
 
 ---
 
-## 🌐 Alternative Deployment Options
+## 🎯 Key Features
 
-| Platform | Free Tier | Notes |
-|---|---|---|
-| **Streamlit Cloud** | ✅ Yes | 1 GB RAM, easiest |
-| **Hugging Face Spaces** | ✅ Yes | 2 GB RAM, great for ML |
-| **Railway** | Partial | Better for heavy models |
-| **Render** | ✅ Yes | 512MB RAM free |
-
----
-
-## 📊 Dashboard Features
-
-- **🔍 Predict Tab** — Upload image, get predictions from all 3 models with confidence bars
-- **📊 Model Comparison** — Accuracy, Precision, Recall, F1, AUC-ROC bar charts + ROC curves
-- **📈 Training Curves** — Epoch-by-epoch accuracy and loss plots per model
-- **🧩 Confusion Matrix** — Interactive per-model confusion matrices with classification report
-- **🏗️ Architecture** — Visual layer-by-layer architecture diagram + training pipeline
+- 🖼️ Image-based disease classification  
+- 🧠 Deep learning using pretrained CNN models  
+- ⚖️ Comparative analysis of multiple architectures  
+- 📊 High accuracy with EfficientNetB0  
+- 🌐 Interactive Streamlit web interface  
+- ⚡ Fast and efficient predictions  
+- 🚜 Suitable for real-world field deployment  
 
 ---
 
-## 🎛️ Sidebar Controls
+## 🛠️ Tech Stack
 
-- Upload cattle skin images (JPG/PNG)
-- Adjust decision threshold (default 0.5, best threshold for ResNet50: 0.36)
-- Toggle which models participate in ensemble prediction
+- **Programming Language:** Python  
+- **Libraries & Tools:**  
+  - TensorFlow / Keras  
+  - OpenCV  
+  - NumPy, Pandas  
+  - Scikit-learn  
+  - Matplotlib / Seaborn  
+  - Streamlit  
+- **Model:** Pre-trained CNNs (MobileNetV2, ResNet50, EfficientNetB0)
+
+---
+
+## ⚙️ System Architecture
+
+1. Upload livestock skin image  
+2. Resize image to 224×224  
+3. Apply preprocessing  
+4. Extract features using CNN backbone  
+5. Pass features through classification head  
+6. Generate probability score  
+7. Output prediction (Normal / Lumpy Skin)  
+
+---
+
+## 🧠 Model Selection
+
+| Model     | Accuracy | Scalability | Robustness | Final Choice |
+|----------|---------|------------|------------|-------------|
+| MobileNetV2  | ~92.3% | High       | High       | Good        |
+| ResNet50     | ~88.5% | Moderate   | Moderate   | Not Used    |
+| EfficientNetB0 | ~94.6% | High     | High       | ⭐ Selected  |
+
+---
+
+## 📊 Methodology
+
+### 🔹 Data Preprocessing
+- Image resizing to 224×224  
+- Normalization based on model requirements  
+- Data augmentation (rotation, zoom, flip)  
+
+### 🔹 Model Training
+- Transfer learning using ImageNet weights  
+- Two-phase training:
+  - Frozen backbone training  
+  - Fine-tuning top layers  
+
+### 🔹 Classification
+- Binary classification (Normal vs Lumpy Skin)  
+- Sigmoid activation for probability output  
+
+### 🔹 Evaluation Metrics
+- Accuracy  
+- Precision  
+- Recall  
+- F1-score  
+- ROC-AUC  
+
+---
+
+## 🖥️ Application Features
+
+### 📌 Modules
+
+- Upload Image → Input livestock image  
+- Select Model → Choose CNN architecture  
+- Predict → Run classification  
+- Output → Show result with confidence  
+
+---
+
+## 📊 Results & Performance
+
+- ✅ EfficientNetB0 achieved highest accuracy (~94.6%)  
+- ⚡ Fast inference suitable for real-time use  
+- 🎯 High precision and recall for disease detection  
+- 📊 Strong generalization on validation data  
+- 📉 Slight performance drop on low-quality images  
+
+---
+
+## 🏆 Key Achievements
+
+- Built **complete deep learning pipeline for livestock disease detection**  
+- Implemented **comparative analysis of CNN architectures**  
+- Achieved **high accuracy using EfficientNetB0**  
+- Designed **user-friendly Streamlit interface**  
+- Developed **real-world deployable AI solution**  
+
+---
+
+## 👨‍💻 Team Members
+
+- Krish Naik  
+- Nrependre Shivhare  
+- Prasham Godha  
+
+---
+
+## 🙏 Mentors
+
+- Dr. K. K. Sharma  
+- Dr. Lalit Purohit  
+- Dr. Upendra Singh  
+- Mr. Akshay Gupta  
+
+---
+
+## 🔮 Future Work
+
+- Multi-class livestock disease detection  
+- Mobile app deployment (TensorFlow Lite)  
+- Integration with veterinary systems  
+- Explainable AI (Grad-CAM visualization)  
+- Larger and diverse dataset training  
+
+---
+
+## 📚 References
+
+- MobileNetV2 (Google Research)  
+- ResNet (Microsoft Research)  
+- EfficientNet (Google AI)  
+- TensorFlow Documentation  
+- Research papers on Deep Learning in Agriculture  
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub!
